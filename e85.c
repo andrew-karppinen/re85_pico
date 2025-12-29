@@ -1,3 +1,16 @@
+
+
+/*
+ ethanol conversion software with cold start detection for rasperry pi pico
+
+Using BMP180 temperature sensor
+
+ Created by AK
+ */
+
+
+
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
@@ -19,6 +32,7 @@ uint16_t AC5, AC6;
 #define  BASE_TEMPERATURE_COLD_START 45
 #define MAX_FACTOR 170
 
+#define DEFAULT_TEMPRATURE_CELSIUS 15 // if sensor fails
 
 struct Injector {
     bool open;
@@ -36,7 +50,7 @@ void init_ports() {
     adc_gpio_init(26);
     adc_select_input(0); // ADC0
 
-    //alustus, i2c:
+    //init i2c
     i2c_init(I2C_PORT, 100 * 1000); // 100 kHz
     gpio_set_function(I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(I2C_SCL_PIN, GPIO_FUNC_I2C);
@@ -148,11 +162,11 @@ int main() {
         int32_t temperature = bmp180_read_temperature();
         current_temperature = temperature / 10.0f; //convert to celsius
     }else { //if BMP180 fail
-        current_temperature = 15.0f; //default temp
+        current_temperature = DEFAULT_TEMPRATURE_CELSIUS; //default temp
         gpio_put(ERROR_LED_PIN, 1); //turn on error led
     }
 
-
+    printf("current temperature: %.2f C\n", current_temperature);
     int start_factor;
     if (current_temperature < BASE_TEMPERATURE_COLD_START) {
         start_factor = base_factor + ((BASE_TEMPERATURE_COLD_START - current_temperature) * cold_start_factor);
@@ -177,6 +191,16 @@ int main() {
             current_factor = base_factor;
         }
 
+
+        if (!engine_running && first_injector_pulse_time != 0) { //first pulse detected
+            if ((time_us_64()-last_injector_pulse_time> 250000)) { //no pulses for 250ms
+                first_injector_pulse_time = 0; //reset, no start
+            }
+            if ((time_us_64()-first_injector_pulse_time)>2000000){ //2 seconds of pulses, engine is running
+                engine_running = true;
+                engine_start_time = time_us_64();
+            }
+        }
 
 
         //process injectors
