@@ -1,11 +1,11 @@
 
-
 /*
- ethanol conversion software with cold start detection for rasperry pi pico
-
+Ethanol conversion software with cold start detection for rasperry pi pico
 Using BMP180 temperature sensor
 
- Created by AK
+Using ADC to read potentiometer for base fuel factor on gpio pin 26 (ADC0)
+
+Created by AK
  */
 
 
@@ -166,7 +166,6 @@ int main() {
         gpio_put(ERROR_LED_PIN, 1); //turn on error led
     }
 
-    printf("current temperature: %.2f C\n", current_temperature);
     int start_factor;
     if (current_temperature < BASE_TEMPERATURE_COLD_START) {
         start_factor = base_factor + ((BASE_TEMPERATURE_COLD_START - current_temperature) * cold_start_factor);
