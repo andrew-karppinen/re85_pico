@@ -4,3 +4,6 @@ Injector pulse extender with cold-start detection. The injector pulse width is i
 
 
 <img width="530" height="646" alt="Nimetön kaavio drawio" src="https://github.com/user-attachments/assets/0f635e6a-841e-41bc-ae2c-cb50b591f2e4" />
+
+
+<img width="2400" height="1080" alt="Screenshot_20251217-162536" src="https://github.com/user-attachments/assets/382b15f2-39c7-4639-aee7-80ec2c98f438" />
