@@ -140,7 +140,6 @@ int main() {
 
     init_injectors_gpio(injectors, count_of_injectors);
 
-
     int base_factor; //10 - 35
     uint16_t raw = adc_read(); // 0–4095
     base_factor = scale(raw);
@@ -181,6 +180,7 @@ int main() {
 
     while (1) {
 
+        printf("current factor %d \n", current_factor);
 
         if (engine_running && current_factor > base_factor) {
             current_factor = start_factor - ((time_us_64()-engine_start_time)/1000000) * time_factor;
@@ -192,10 +192,10 @@ int main() {
 
 
         if (!engine_running && first_injector_pulse_time != 0) { //first pulse detected
-            if ((time_us_64()-last_injector_pulse_time> 250000)) { //no pulses for 250ms
+            if ((time_us_64()-last_injector_pulse_time> 190000)) { //no pulses for 190ms
                 first_injector_pulse_time = 0; //reset, no start
             }
-            if ((time_us_64()-first_injector_pulse_time)>2000000){ //2 seconds of pulses, engine is running
+            else if ((time_us_64()-first_injector_pulse_time)>2000000){ //2 seconds of pulses, engine is running
                 engine_running = true;
                 engine_start_time = time_us_64();
             }
