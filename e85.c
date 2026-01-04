@@ -189,7 +189,7 @@ int main() {
         }
 
         if (!engine_running && first_injector_pulse_time != 0) { //first pulse detected
-            if ((time_us_64()-last_injector_pulse_time> 190000)) { //no pulses for 190ms
+            if ((time_us_64()-last_injector_pulse_time> 190000)) { //no pulses for 1.9 seconds
                 first_injector_pulse_time = 0; //reset, no start
             }
             else if ((time_us_64()-first_injector_pulse_time)>2000000){ //2 seconds of pulses, engine is running
