@@ -117,7 +117,7 @@ int scale(int x)
 {
     //adc scale
     //sclae raw adc to value 10-35 out = out_min + (x - in_min) * (out_max - out_min) / (in_max - in_min)
-    return 10+(x-0)*(35-5)/(4095-0);
+    return 10+(x-0)*(35-10)/(4095-0);
 }
 
 
