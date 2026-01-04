@@ -180,8 +180,6 @@ int main() {
 
     while (1) {
 
-        printf("current factor %d \n", current_factor);
-
         if (engine_running && current_factor > base_factor) {
             current_factor = start_factor - ((time_us_64()-engine_start_time)/1000000) * time_factor;
         }
@@ -189,7 +187,6 @@ int main() {
         if (current_factor < base_factor) {
             current_factor = base_factor;
         }
-
 
         if (!engine_running && first_injector_pulse_time != 0) { //first pulse detected
             if ((time_us_64()-last_injector_pulse_time> 190000)) { //no pulses for 190ms
